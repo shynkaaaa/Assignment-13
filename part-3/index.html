@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vue.js Carousel Component</title>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f5f5f5;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .carousel {
+      position: relative;
+      overflow: hidden;
+      width: 80%;
+      max-width: 600px;
+    }
+
+    .carousel-container {
+      display: flex;
+      transition: transform 0.5s ease-in-out;
+    }
+
+    .carousel-item {
+      flex: 0 0 100%;
+      width: 100%;
+    }
+
+    img {
+      width: 100%;
+      height: auto;
+    }
+
+    .caption {
+      text-align: center;
+      margin-top: 10px;
+      font-style: italic;
+      color: #555;
+    }
+
+    .nav-button {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 24px;
+      background: none;
+      border: none;
+      color: #333;
+      cursor: pointer;
+    }
+
+    .prev {
+      left: 10px;
+    }
+
+    .next {
+      right: 10px;
+    }
+  </style>
+</head>
+<body>
+
+<div id="app"></div>
+
+<script>
+  Vue.component('carousel', {
+    props: ['items'],
+    data() {
+      return {
+        currentIndex: 0,
+        intervalId: null, 
+      };
+    },
+    methods: {
+      next() {
+        this.currentIndex = (this.currentIndex + 1) % this.items.length;
+      },
+      prev() {
+        this.currentIndex = (this.currentIndex - 1 + this.items.length) % this.items.length;
+      },
+      startAutoplay() {
+        this.intervalId = setInterval(this.next, 3000); // Auto transition every 3 seconds
+      },
+      stopAutoplay() {
+        clearInterval(this.intervalId);
+      },
+    },
+    mounted() {
+    },
+    beforeDestroy() {
+      this.stopAutoplay();
+    },
+    template: `
+      <div class="carousel">
+        <div class="carousel-container" :style="{ transform: 'translateX(-' + currentIndex * 100 + '%)' }">
+          <div v-for="(item, index) in items" :key="index" class="carousel-item">
+            <img :src="item.src" :alt="item.alt">
+            <div v-if="item.caption" class="caption">{{ item.caption }}</div>
+          </div>
+        </div>
+        <button @click="prev" class="nav-button prev">‹</button>
+        <button @click="next" class="nav-button next">›</button>
+      </div>
+    `,
+  });
+
+  new Vue({
+    el: '#app',
+    data: {
+        carouselItems: [
+  { src: 'https://placekitten.com/600/400', alt: 'Cat Image 1', caption: 'Caption for Cat Image 1' },
+  { src: 'https://placekitten.com/601/400', alt: 'Cat Image 2', caption: 'Caption for Cat Image 2' },
+]
+
+    },
+    template: '<carousel :items="carouselItems"></carousel>',
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vue.js Accordion Component</title>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f5f5f5;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .accordion {
+      width: 80%;
+      max-width: 600px;
+      margin: auto;
+    }
+
+    .accordion-item {
+      border-bottom: 1px solid #ddd;
+    }
+
+    .accordion-header {
+      padding: 12px;
+      background-color: #f5f5f5;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .accordion-icon {
+      font-size: 18px;
+    }
+
+    .accordion-content {
+      padding: 12px;
+      overflow: hidden;
+      transition: max-height 0.3s ease-out;
+      max-height: 500px; 
+    }
+  </style>
+</head>
+<body>
+
+<div id="app"></div>
+
+<script>
+Vue.component('accordion', {
+  props: ['items'],
+  methods: {
+    toggleAccordion(item) {
+      this.$set(item, 'expanded', !item.expanded);
+    },
+    showIcon(item) {
+      return true;
+    },
+  },
+  template: `
+    <div class="accordion">
+      <div v-for="item in items" :key="item.name" class="accordion-item">
+        <div class="accordion-header" @click="toggleAccordion(item)">
+          {{ item.title }}
+          <span v-if="showIcon(item)" class="accordion-icon">{{ item.expanded ? '-' : '+' }}</span>
+        </div>
+        <div v-if="item.expanded" class="accordion-content">
+          <slot name="content" :item="item"></slot>
+        </div>
+      </div>
+    </div>
+  `,
+});
+
+
+
+  new Vue({
+    el: '#app',
+    data: {
+      accordionItems: [
+        { name: 'name1', title: 'Section 1' },
+        { name: 'name2', title: 'Section 2', expanded: true },
+      ],
+    },
+    template: `
+      <accordion :items="accordionItems">
+        <template v-slot:content="{ item }">
+          <!-- Custom content for each accordion item -->
+          <p>This is custom content for {{ item.title }}</p>
+        </template>
+      </accordion>
+    `,
+  });
+</script>
+
+</body>
+</html>

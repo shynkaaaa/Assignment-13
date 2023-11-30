@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vue.js Timeline Component</title>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div id="app"></div>
+
+<script src="Timeline.js"></script>
+
+<script>
+  new Vue({
+    el: '#app',
+    data: {
+      events: [
+        { title: 'Event 1', date: '2023-01-01', description: 'Description for Event 1' },
+        { title: 'Event 2', date: '2023-02-15', description: 'Description for Event 2' },
+      ],
+    },
+    template: '<timeline :events="events" />', // Use lowercase "timeline" here
+  });
+</script>
+
+</body>
+</html>
